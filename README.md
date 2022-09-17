@@ -6,7 +6,7 @@ An opinionated but pre-configured NextJS template.
 
 then
 
-`npm update`
+`npm install`
 
 # Summary
 
