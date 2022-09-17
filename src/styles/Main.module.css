@@ -1,0 +1,8 @@
+.main {
+  border: solid green 0px;
+  flex-grow: 1;
+  padding-top: 1vw;
+  width: 80vw;
+  margin: 0 auto;
+  min-width: 760px;
+}

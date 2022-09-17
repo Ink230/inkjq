@@ -1,0 +1,7 @@
+.next
+.gitignore
+.eslintrc.json
+.husky
+.vscode
+dist
+node_modules
