@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { Layout, Main } from '../components';
 
-const title: string = 'Ink NextJS Template';
+const title: string = 'Ink JQ';
 
 const Home: NextPage = () => {
   return (

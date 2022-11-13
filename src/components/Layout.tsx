@@ -9,7 +9,7 @@ type Props = {
   _home: boolean;
 };
 
-export const siteName = 'Ink NextJS Template';
+export const siteName = 'Ink JQ';
 
 export const Layout: React.FC<Props> = ({
   children,

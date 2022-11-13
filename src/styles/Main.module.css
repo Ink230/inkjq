@@ -1,8 +1,26 @@
 .main {
-  border: solid green 0px;
-  flex-grow: 1;
-  padding-top: 1vw;
-  width: 80vw;
+  width: 100vw;
+  min-height: 100vh;
   margin: 0 auto;
-  min-width: 760px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  column-gap: 50px;
+  background-color: #5e1c74;
+}
+
+.selector {
+  border: solid 0px #b18fcf;
+  background-color: #d8d8f6;
+  padding: 5px;
+  border-radius: 4px;
+  width: 120px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.selector:hover {
+  background-color: #eecbee;
 }
