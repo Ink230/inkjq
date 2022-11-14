@@ -21,9 +21,9 @@ export const Layout: React.FC<Props> = ({
       <Head>
         <link rel="icon" href="/favicon.ico" />
 
-        <meta name="description" content="Ink NextJS Template" />
-        <meta name="og:title" content={siteName} />
-        <title>{siteName}</title>
+        <meta name="description" content={_pageTitle} />
+        <meta name="og:title" content={_pageTitle} />
+        <title>{_pageTitle}</title>
       </Head>
       <div className={css.container}>
         <Header />
