@@ -21,12 +21,18 @@ export interface CircleData {
 const Targets: NextPage = () => {
   //Setup state to hold ticks
   const [time, setTime] = useState(Date.now());
+  const [menuTime, setMenuTime] = useState(Date.now());
+  const [endTime, setEndTime] = useState(Date.now());
+
+  const [mainMenu, setMainMenu] = useState(true);
+  const [endMenu, setEndMenu] = useState(false);
+
   const [counter, setCounter] = useState(0);
   const [circles, setCircles] = useState<CircleData[]>([]);
   const [circle, setCircle] = useState<CircleData>();
 
   //scenes and UI
-  let menu = <div className={css.top}>Space to Play</div>;
+  let menu = <div className={css.top}>Space to Play: {counter}</div>;
 
   let game = (
     <div className={css.container}>
@@ -37,66 +43,81 @@ const Targets: NextPage = () => {
 
   let end = <div>End Screen</div>;
 
-  //0 - menu, 1 - game, 2 - end game screen
-  const [scene, setScene] = useState(0);
   const [output, setOutput] = useState(menu);
 
   //controls
+  useEffect(() => {
+    document.addEventListener(
+      'keyup',
+      (event) => {
+        console.log('1');
+
+        if (event.code === 'ShiftLeft') {
+          setMainMenu(true);
+          setEndMenu(false);
+          setMenuTime(Date.now());
+        }
+
+        if (event.code === 'Space') {
+          setMainMenu(false);
+          setEndMenu(false);
+          setTime(Date.now());
+        }
+
+        if (event.code === 'ShiftRight') {
+          setCounter(0);
+        }
+      },
+      false
+    );
+  }, []);
 
   //game loop
   useEffect(() => {
-    //controls
-    document.addEventListener(
-      'keydown',
-      (event) => {
-        if (event.code === 'Space') {
-          setScene(1);
-        }
-      },
-      false
-    );
-
-    document.addEventListener(
-      'keydown',
-      (event) => {
-        if (event.code === 'ShiftLeft') {
-          setScene(0);
-        }
-      },
-      false
-    );
-
     const interval = setInterval(() => {
+      if (mainMenu) {
+        return () => clearInterval(interval);
+      }
       setTime(Date.now()); //main tick control
       //example state changer
 
-      if (scene === 0) {
-        setOutput(menu);
-      } else if (scene === 1) {
-        setOutput(game);
-        setCounter(counter + 1);
-        if (circle) {
-          console.log('grow cricle');
-          console.log(JSON.stringify(circle));
-        } else {
-          console.log('create circle');
-          let a: CircleData = {
-            id: 1,
-            radius: 5,
-            x: 1,
-            y: 1,
-            clicked: false,
-            speed: 1,
-            hp: 1,
-          };
-          setCircle((circle) => ({ ...circle, ...a }));
-        }
-        //grow circles
-        //check collisions
-        //draw new circles in blank spots
-      } else if (scene === 0) {
-        setOutput(end);
+      setCounter(counter + 1);
+      if (circle) {
+        //console.log('grow cricle');
+        //console.log(JSON.stringify(circle));
+        game = (
+          <div className={css.container}>
+            <div className={css.top}>Client Render Tick: {counter}</div>
+            <div className={css.gamecontainer}>
+              <div
+                style={{
+                  backgroundColor: 'red',
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '50%',
+                  position: 'relative',
+                  top: '20px',
+                  left: '40px',
+                }}
+              ></div>
+            </div>
+          </div>
+        );
+      } else {
+        //console.log('create circle');
+        let a: CircleData = {
+          id: 1,
+          radius: 5,
+          x: 1,
+          y: 1,
+          clicked: false,
+          speed: 1,
+          hp: 1,
+        };
+        setCircle((circle) => ({ ...circle, ...a }));
       }
+
+      setOutput(game);
     }, 1);
 
     return () => {
@@ -104,7 +125,40 @@ const Targets: NextPage = () => {
     };
   }, [time]);
 
-  //what gets output each game loop cycle
+  //main menu
+  useEffect(() => {
+    const intervalMenu = setInterval(() => {
+      if (!mainMenu) {
+        clearInterval(intervalMenu);
+        return;
+      }
+      setMenuTime(Date.now()); //main tick control
+
+      setOutput(menu);
+    }, 50);
+
+    return () => {
+      clearInterval(intervalMenu);
+    };
+  }, [menuTime]);
+
+  //end screen
+  useEffect(() => {
+    const intervalEnd = setInterval(() => {
+      if (endMenu === false) {
+        clearInterval(intervalEnd);
+        return;
+      }
+      setEndTime(Date.now()); //main tick control
+
+      setOutput(end);
+    }, 100);
+
+    return () => {
+      clearInterval(intervalEnd);
+    };
+  }, [endTime]);
+
   return (
     <Layout _home={true} _pageTitle={title}>
       {output}
