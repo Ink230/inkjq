@@ -19,7 +19,7 @@ export interface CircleData {
 //game parameters
 
 const Targets: NextPage = () => {
-  //Setup state to hold ticks
+  //Setup state
   const [time, setTime] = useState(Date.now());
   const [menuTime, setMenuTime] = useState(Date.now());
   const [endTime, setEndTime] = useState(Date.now());
@@ -65,7 +65,9 @@ const Targets: NextPage = () => {
         }
 
         if (event.code === 'ShiftRight') {
-          setCounter(0);
+          setMainMenu(false);
+          setEndMenu(true);
+          setEndTime(Date.now());
         }
       },
       false
@@ -75,12 +77,13 @@ const Targets: NextPage = () => {
   //game loop
   useEffect(() => {
     const interval = setInterval(() => {
-      if (mainMenu) {
+      if (mainMenu || endMenu) {
         return () => clearInterval(interval);
       }
-      setTime(Date.now()); //main tick control
-      //example state changer
+      //tick control
+      setTime(Date.now());
 
+      //game logic
       setCounter(counter + 1);
       if (circle) {
         //console.log('grow cricle');
@@ -117,6 +120,7 @@ const Targets: NextPage = () => {
         setCircle((circle) => ({ ...circle, ...a }));
       }
 
+      //draw
       setOutput(game);
     }, 1);
 
@@ -132,8 +136,12 @@ const Targets: NextPage = () => {
         clearInterval(intervalMenu);
         return;
       }
-      setMenuTime(Date.now()); //main tick control
+      //tick control
+      setMenuTime(Date.now());
 
+      //game logic
+
+      //draw
       setOutput(menu);
     }, 50);
 
@@ -149,8 +157,13 @@ const Targets: NextPage = () => {
         clearInterval(intervalEnd);
         return;
       }
-      setEndTime(Date.now()); //main tick control
+      //tick control
+      setEndTime(Date.now());
 
+      //game logic
+      setCounter(0);
+
+      //draw
       setOutput(end);
     }, 100);
 
