@@ -3,5 +3,7 @@
 .eslintrc.json
 .husky
 .vscode
+.txt
+targets_notes.txt
 dist
 node_modules

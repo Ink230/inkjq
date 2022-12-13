@@ -1,6 +1,6 @@
 'use client';
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Layout } from '../components';
 import css from '../styles/Targets.module.css';
 
@@ -14,6 +14,7 @@ export interface CircleData {
   clicked: boolean;
   speed?: number;
   hp?: number;
+  scale: number;
 }
 
 //game parameters
@@ -24,60 +25,265 @@ const Targets: NextPage = () => {
   const [menuTime, setMenuTime] = useState(Date.now());
   const [endTime, setEndTime] = useState(Date.now());
 
-  const [mainMenu, setMainMenu] = useState(true);
-  const [endMenu, setEndMenu] = useState(false);
+  const mainMenu = useRef(true);
+  const endMenu = useRef(false);
 
   const [counter, setCounter] = useState(0);
   const [circles, setCircles] = useState<CircleData[]>([]);
-  const [circle, setCircle] = useState<CircleData>();
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+
+  //how often the objects are ticked
+  const [circleTimer, setCircleTimer] = useState(Date.now());
+  const [radiusTimer, setRadiusTimer] = useState(Date.now());
+
+  //the magnitude in the attribute's change
+  const [circleRadiusSize, setCircleRadiusSize] = useState(350);
+  const [circleSpawnSpeed, setCircleSpawnSpeed] = useState(800);
+  const [circleShrinkSpeed, setCircleShrinkSpeed] = useState(0.01);
+
+  //the rate the attribute's tick amount changes
+  const [circleRadiusSizeTimer, setCircleRadiusSizeTimer] = useState(
+    Date.now()
+  );
+  const [circleSpawnSpeedTimer, setCircleSpawnSpeedTimer] = useState(
+    Date.now()
+  );
+  const [circleShrinkSpeedTimer, setCircleShrinkSpeedTimer] = useState(
+    Date.now()
+  );
 
   //scenes and UI
-  let menu = <div className={css.top}>Space to Play: {counter}</div>;
-
-  let game = (
-    <div className={css.container}>
-      <div className={css.top}>Client Render Tick: {counter}</div>
-      <div className={css.gamecontainer}></div>
+  let menu = (
+    <div className={css.base}>
+      <div className={css.container}>
+        <div className={css.top}>
+          Client Render Tick: {counter} | Score: {score} | Menu:{' '}
+          {String(mainMenu.current)}| EndMenu: {String(endMenu.current)} |
+          Lives: {lives}
+        </div>
+        <div
+          className={css.gamecontainer}
+          style={{ backgroundColor: '#7f7f7f' }}
+        >
+          {Array.from(circles).map((circle) => {
+            return (
+              <div
+                key={circle.id}
+                style={{
+                  backgroundColor: '#414141',
+                  border: 'solid 1px #2c2c2c',
+                  width: circle.radius,
+                  height: circle.radius,
+                  borderRadius: '50%',
+                  position: 'absolute',
+                  top: circle.y,
+                  left: circle.x,
+                  transformOrigin: 'center center',
+                  transform: `scale(${circle.scale})`,
+                }}
+              ></div>
+            );
+          })}
+          <div className={css.menucontainer}>
+            <div className={css.pause}>START</div>
+            <div className={css.little}>
+              left shift to pause | space to start | right shift to reset
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
-  let end = <div>End Screen</div>;
+  let game = (
+    <div className={css.base}>
+      <div className={css.container}>
+        <div className={css.top}>
+          Client Render Tick: {counter} | Score: {score} | Menu:{' '}
+          {String(mainMenu.current)}| EndMenu: {String(endMenu.current)} |
+          Lives: {lives}
+        </div>
+        <div className={css.gamecontainer}>
+          {Array.from(circles).map((circle) => {
+            return (
+              <div
+                onMouseDown={() => clickedCircle(circle.id)}
+                key={circle.id}
+                style={{
+                  backgroundColor: 'purple',
+                  border: 'solid 1px red',
+                  width: circle.radius,
+                  height: circle.radius,
+                  borderRadius: '50%',
+                  position: 'absolute',
+                  top: circle.y,
+                  left: circle.x,
+                  transformOrigin: 'center center',
+                  transform: `scale(${circle.scale})`,
+                }}
+              ></div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  let end = (
+    <div className={css.base}>
+      <div className={css.container}>
+        <div className={css.top}>
+          Client Render Tick: {counter} | Score: {score} | Menu:
+          {String(mainMenu.current)}| EndMenu: {String(endMenu.current)} |
+          lives: {lives}
+        </div>
+        <div
+          className={css.gamecontainer}
+          style={{ backgroundColor: '#7f7f7f' }}
+        >
+          {Array.from(circles).map((circle) => {
+            return (
+              <div
+                key={circle.id}
+                style={{
+                  backgroundColor: '#414141',
+                  border: 'solid 1px #2c2c2c',
+                  width: circle.radius,
+                  height: circle.radius,
+                  borderRadius: '50%',
+                  position: 'absolute',
+                  top: circle.y,
+                  left: circle.x,
+                  transformOrigin: 'center center',
+                  transform: `scale(${circle.scale})`,
+                }}
+              ></div>
+            );
+          })}
+          <div className={css.menucontainer}>
+            <div className={css.pause}>GAME OVER</div>
+            <div className={css.little}>
+              left shift to pause | space to start | right shift to reset
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   const [output, setOutput] = useState(menu);
 
   //controls
+  const pauseAndStartMenu = () => {
+    mainMenu.current = true;
+    setMenuTime(Date.now());
+  };
+  const startGame = () => {
+    setLives(3);
+    setCircles([]);
+    setCounter(0);
+    setScore(0);
+    setCircleRadiusSize(400);
+    setCircleSpawnSpeed(1000);
+    setCircleShrinkSpeed(0.015);
+    mainMenu.current = false;
+    endMenu.current = false;
+    setTime(Date.now());
+  };
+  const gameOver = () => {
+    mainMenu.current = false;
+    endMenu.current = true;
+    setEndTime(Date.now());
+  };
+
+  const resumeGame = () => {
+    mainMenu.current = false;
+    endMenu.current = false;
+    setTime(Date.now());
+  };
+
   useEffect(() => {
     document.addEventListener(
       'keyup',
       (event) => {
-        console.log('1');
-
         if (event.code === 'ShiftLeft') {
-          setMainMenu(true);
-          setEndMenu(false);
-          setMenuTime(Date.now());
+          if (!endMenu.current) pauseAndStartMenu();
         }
 
         if (event.code === 'Space') {
-          setMainMenu(false);
-          setEndMenu(false);
-          setTime(Date.now());
+          if (endMenu.current === true) {
+            startGame();
+          } else {
+            resumeGame();
+          }
         }
 
         if (event.code === 'ShiftRight') {
-          setMainMenu(false);
-          setEndMenu(true);
-          setEndTime(Date.now());
+          gameOver();
         }
       },
       false
     );
   }, []);
 
+  //lib functions
+
+  const removeCircle = (id: number) => {
+    const newCircles: CircleData[] = circles.filter(
+      (circle) => circle.id != id
+    );
+    setCircles(newCircles);
+  };
+  const createCircle = () => {
+    return [
+      {
+        id: circles.length ? circles[circles.length - 1].id + 1 : 1,
+        radius: circleRadiusSize,
+        x: getRandomInt(1600 - circleRadiusSize),
+        y: getRandomInt(900 - circleRadiusSize),
+        clicked: false,
+        speed: 1,
+        hp: 1,
+        scale: 1,
+      },
+    ];
+  };
+  const addCircles = (newCircles: CircleData[]) => {
+    setCircles([...circles, ...newCircles]);
+  };
+  const decreaseRadius = (oldCircles: CircleData[]) => {
+    return oldCircles.map<CircleData>((circle) => {
+      return {
+        ...circle,
+        scale: circle.scale - circleShrinkSpeed,
+      };
+    });
+  };
+  const cullingCircles = (oldCircles: CircleData[]) => {
+    return oldCircles.filter((circle) => circle.scale > 0.05);
+  };
+  const getRandomInt = (max: number) => {
+    return Math.floor(Math.random() * max);
+  };
+  const clickedCircle = (id: number) => {
+    setScore(score + 5);
+    removeCircle(id);
+  };
+  const misClick = () => {
+    setScore(score - 20);
+  };
+
+  useEffect(() => {
+    if (lives <= 0 || score <= -20) {
+      gameOver();
+    }
+  }, [lives, score]);
+
   //game loop
   useEffect(() => {
     const interval = setInterval(() => {
-      if (mainMenu || endMenu) {
+      if (mainMenu.current || endMenu.current) {
         return () => clearInterval(interval);
       }
       //tick control
@@ -85,40 +291,78 @@ const Targets: NextPage = () => {
 
       //game logic
       setCounter(counter + 1);
-      if (circle) {
-        //console.log('grow cricle');
-        //console.log(JSON.stringify(circle));
-        game = (
+
+      //decrease size of all circles and handle culling them
+      //the 50 is locked in
+      if (radiusTimer + 50 < Date.now()) {
+        const decreasedCircles = decreaseRadius(circles);
+        const updatedCircles = cullingCircles(decreasedCircles);
+        setCircles(updatedCircles);
+        setLives(lives - (decreasedCircles.length - updatedCircles.length));
+        setRadiusTimer(Date.now());
+      }
+
+      //check if its time to draw a new circle
+      if (circleTimer + circleSpawnSpeed < Date.now()) {
+        addCircles(createCircle());
+        setCircleTimer(Date.now());
+      }
+
+      //check if time to change all the rates
+      if (circleRadiusSizeTimer + 7000 < Date.now() && circleRadiusSize > 210) {
+        setCircleRadiusSize(circleRadiusSize - 15);
+        setCircleRadiusSizeTimer(Date.now());
+      }
+      if (circleSpawnSpeedTimer + 2000 < Date.now() && circleSpawnSpeed > 290) {
+        setCircleSpawnSpeed(circleSpawnSpeed - 25);
+        setCircleSpawnSpeedTimer(Date.now());
+      }
+      if (
+        circleShrinkSpeedTimer + 25000 < Date.now() &&
+        circleRadiusSize < 0.025
+      ) {
+        setCircleShrinkSpeed(circleShrinkSpeed + 0.005);
+        setCircleShrinkSpeedTimer(Date.now());
+      }
+
+      //assign to game to draw via setOutput
+      game = (
+        <div className={css.base}>
           <div className={css.container}>
-            <div className={css.top}>Client Render Tick: {counter}</div>
-            <div className={css.gamecontainer}>
-              <div
-                style={{
-                  backgroundColor: 'red',
-                  width: '200px',
-                  height: '200px',
-                  borderRadius: '50%',
-                  position: 'relative',
-                  top: '20px',
-                  left: '40px',
-                }}
-              ></div>
+            <div className={css.top}>
+              Client Render Tick: {counter} | Score: {score} | Menu:{' '}
+              {String(mainMenu['current'])}| EndMenu:{' '}
+              {String(endMenu['current'])} | Lives: {lives}
+            </div>
+            <div className={css.gamecontainer} onMouseDown={() => misClick()}>
+              {Array.from(circles).map((circle) => {
+                return (
+                  <div
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      clickedCircle(circle.id);
+                    }}
+                    key={circle.id}
+                    style={{
+                      backgroundColor: 'purple',
+                      border: 'solid 1px red',
+                      width: circle.radius,
+                      height: circle.radius,
+                      borderRadius: '50%',
+                      position: 'absolute',
+                      top: circle.y,
+                      left: circle.x,
+                      transformOrigin: 'center center',
+                      transform: `scale(${circle.scale})`,
+                      zIndex: 2,
+                    }}
+                  ></div>
+                );
+              })}
             </div>
           </div>
-        );
-      } else {
-        //console.log('create circle');
-        let a: CircleData = {
-          id: 1,
-          radius: 5,
-          x: 1,
-          y: 1,
-          clicked: false,
-          speed: 1,
-          hp: 1,
-        };
-        setCircle((circle) => ({ ...circle, ...a }));
-      }
+        </div>
+      );
 
       //draw
       setOutput(game);
@@ -132,7 +376,7 @@ const Targets: NextPage = () => {
   //main menu
   useEffect(() => {
     const intervalMenu = setInterval(() => {
-      if (!mainMenu) {
+      if (!mainMenu.current) {
         clearInterval(intervalMenu);
         return;
       }
@@ -153,7 +397,7 @@ const Targets: NextPage = () => {
   //end screen
   useEffect(() => {
     const intervalEnd = setInterval(() => {
-      if (endMenu === false) {
+      if (endMenu.current === false) {
         clearInterval(intervalEnd);
         return;
       }
@@ -161,7 +405,6 @@ const Targets: NextPage = () => {
       setEndTime(Date.now());
 
       //game logic
-      setCounter(0);
 
       //draw
       setOutput(end);
@@ -180,43 +423,3 @@ const Targets: NextPage = () => {
 };
 
 export default Targets;
-
-/*
-• circles that get larger
-• if two circles touch its over
-• circles always spawn x diameters apart from each other
-
-difficulty
-• circles grow faster
-• circles populate the field faster
-• 
-
-controls
-• space resets game
-• tab resets to menu
-• click to destroy circle
-
-scenes
-• menu
-• game
-• end scene
-
-difficulties
-easy
-medium
-hard
-insanity
-
-scaling
-• growth speed
-• circle spawn speed
-• circle spawn spacing
- 
-
-v2
-• double clicking, HP ?
-• do something in the circle
-• powerups from completing a challenge?
-
-
-*/
