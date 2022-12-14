@@ -1,0 +1,8 @@
+.circle {
+  background-color: purple;
+  border: solid 1px red;
+  border-radius: 50%;
+  position: absolute;
+  transform-origin: 'center center';
+  z-index: 2;
+}

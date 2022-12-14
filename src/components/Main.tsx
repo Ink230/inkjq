@@ -6,7 +6,7 @@ type Props = {
   children?: ReactNode;
 };
 
-export const Main: React.FC = () => {
+export const Main: React.FC<Props> = ({ children }: Props) => {
   return (
     <div className={css.main}>
       <Link href="/wordle">
