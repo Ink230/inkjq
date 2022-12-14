@@ -19,8 +19,7 @@ export const TargetsMenu: React.FC<Props> = ({
     <div className={css.base}>
       <div className={css.container}>
         <div className={css.top}>
-          Render Tick: {clientRenderTick} || Score: {score} || Lives:
-          {lives}
+          Render Tick: {clientRenderTick} || Score: {score} || Lives: {lives}
         </div>
         {children}
       </div>
