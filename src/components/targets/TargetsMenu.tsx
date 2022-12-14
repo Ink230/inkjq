@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { TargetsInfo } from '../../components';
 import css from '../../styles/targets/TargetsMenu.module.css';
 
 type Props = {
@@ -18,11 +19,12 @@ export const TargetsMenu: React.FC<Props> = ({
     <div className={css.base}>
       <div className={css.container}>
         <div className={css.top}>
-          Client Render Tick: {clientRenderTick} | Score: {score} | Lives:
+          Render Tick: {clientRenderTick} || Score: {score} || Lives:
           {lives}
         </div>
         {children}
       </div>
+      <TargetsInfo />
     </div>
   );
 };

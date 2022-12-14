@@ -28,8 +28,6 @@ export interface CircleOptions {
   border?: string;
 }
 
-//game parameters
-
 const Targets: NextPage = () => {
   //Setup state
   const [time, setTime] = useState(Date.now());
@@ -179,6 +177,11 @@ const Targets: NextPage = () => {
       },
       false
     );
+    document.addEventListener('keydown', (event) => {
+      if (event.code === 'Space') {
+        event.preventDefault();
+      }
+    });
   }, []);
 
   //game condition checker

@@ -23,7 +23,10 @@ export const TargetsGame: React.FC<Props> = ({
     miniMenu = (
       <div className={css.menucontainer}>
         <div className={css.pause}>{pauseTitle}</div>
-        <div className={css.little}>{pauseLitte}</div>
+        <div className={css.littlecontainer}>
+          <div className={css.little}>{pauseLitte}</div>
+          <div className={css.little}>more instructions below</div>
+        </div>
       </div>
     );
   }
