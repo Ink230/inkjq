@@ -3,14 +3,14 @@
 import type { NextPage } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import { Layout, TargetsGame, TargetsMenu } from '../components';
+import * as CONFIG from '../lib/TargetsConfig';
 import {
   CircleData,
   createCircle,
   cullingCircles,
   decreaseRadius,
   drawCircles,
-} from '../lib/Targets';
-import * as CONFIG from '../lib/TargetsConfig';
+} from '../lib/TargetsLib';
 
 const title: string = 'Ink JQ - Targets';
 

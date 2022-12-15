@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { CircleData } from '../../lib/Targets';
+import { CircleData } from '../../lib/TargetsLib';
 import css from '../../styles/targets/TargetsCircle.module.css';
 
 type Props = {

@@ -1,5 +1,5 @@
 import { TargetsCircle } from '../components';
-import * as CONFIG from '../lib/TargetsConfig';
+import * as CONFIG from './TargetsConfig';
 
 export interface CircleData {
   id: number;
