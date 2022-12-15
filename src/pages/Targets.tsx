@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import { Layout, TargetsGame, TargetsMenu } from '../components';
 import {
+  CircleData,
   createCircle,
   cullingCircles,
   decreaseRadius,
@@ -12,21 +13,6 @@ import {
 import * as CONFIG from '../lib/TargetsConfig';
 
 const title: string = 'Ink JQ - Targets';
-
-export interface CircleData {
-  id: number;
-  radius: number;
-  x: number;
-  y: number;
-  clicked: boolean;
-  speed?: number;
-  hp?: number;
-  scale: number;
-}
-export interface CircleOptions {
-  backgroundColor?: string;
-  border?: string;
-}
 
 const Targets: NextPage = () => {
   //Setup state

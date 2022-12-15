@@ -1,6 +1,20 @@
 import { TargetsCircle } from '../components';
 import * as CONFIG from '../lib/TargetsConfig';
-import { CircleData, CircleOptions } from '../pages/targets';
+
+export interface CircleData {
+  id: number;
+  radius: number;
+  x: number;
+  y: number;
+  clicked: boolean;
+  speed?: number;
+  hp?: number;
+  scale: number;
+}
+export interface CircleOptions {
+  backgroundColor?: string;
+  border?: string;
+}
 
 export const createCircle = (
   circles: CircleData[],
