@@ -1,6 +1,8 @@
 .gamecontainer {
-  background-color: #7782e4;
+  background-color: black;
+  background-image: url('/targets_2.jpg');
   border: solid 0px red;
+  border-radius: 20px;
   flex-grow: 1;
   position: relative;
   width: 1600px;
@@ -11,6 +13,7 @@
   max-height: 900px;
   margin: 5px;
   z-index: 1;
+  box-shadow: 0px 0px 3px 3px black;
 }
 
 .menucontainer {
@@ -20,14 +23,15 @@
   z-index: 5;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-content: center;
-  border: solid 1px rgb(0, 0, 0);
-  background-color: #7782e4ab;
+  border: solid 0px rgb(0, 0, 0);
+  background-color: #e86afff2;
   width: 1050px;
   height: 550px;
   margin: 0 auto;
-  border-radius: 5px;
+  border-radius: 30px;
+  padding-top: 100px;
 }
 .pause {
   text-align: center;
@@ -41,7 +45,6 @@
   font-weight: 500;
   letter-spacing: unset;
   text-align: center;
-  margin-top: 100px;
 }
 
 .littlecontainer {
@@ -49,7 +52,34 @@
   font-weight: 500;
   letter-spacing: unset;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+}
+
+.scorecontainer {
+  margin: 25px;
+  font-size: 140%;
+  font-weight: 700;
+}
+.score {
+  font-size: 220%;
+  font-weight: 900;
+  margin-top: 55px;
+  color: #d92525;
+}
+
+.tier {
+  font-size: 30%;
+  font-weight: 600;
+  color: black;
+  padding-top: 40px;
+}
+.tiertext {
+  margin: -12px;
+}
+
+.small {
+  font-size: 40%;
 }

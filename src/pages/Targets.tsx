@@ -90,8 +90,7 @@ const Targets: NextPage = () => {
   let menu = (
     <TargetsMenu score={score} lives={lives} clientRenderTick={counter}>
       <TargetsGame
-        backgroundColor="#7f7f7f"
-        pauseTitle="START"
+        pauseTitle="TARGETS"
         pauseLitte="left shift to pause | space to start | right shift to reset"
       >
         {drawCircles(circles, {
@@ -111,9 +110,10 @@ const Targets: NextPage = () => {
   let end = (
     <TargetsMenu score={score} lives={lives} clientRenderTick={counter}>
       <TargetsGame
-        backgroundColor="#7f7f7f"
         pauseTitle="GAME OVER"
         pauseLitte="left shift to pause | space to start | right shift to reset"
+        score={score}
+        gameOver={true}
       >
         {drawCircles(circles, {
           backgroundColor: '#414141',
