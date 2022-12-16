@@ -5,6 +5,7 @@ import css from '../../styles/targets/TargetsMenu.module.css';
 type Props = {
   children?: ReactNode;
   score?: number;
+  misclickScore: number;
   lives?: number;
   clientRenderTick?: number;
 };
@@ -12,6 +13,7 @@ type Props = {
 export const TargetsMenu: React.FC<Props> = ({
   children,
   score,
+  misclickScore,
   lives,
   clientRenderTick,
 }: Props) => {
@@ -19,7 +21,7 @@ export const TargetsMenu: React.FC<Props> = ({
     <div className={css.base}>
       <div className={css.container}>
         <div className={css.top}>
-          Score: {score} || Lives: {lives}
+          MisClicks: {misclickScore} || Score: {score} || Lives: {lives}
         </div>
         {children}
       </div>

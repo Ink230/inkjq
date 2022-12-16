@@ -27,6 +27,7 @@ const Targets: NextPage = () => {
   const [circles, setCircles] = useState<CircleData[]>([]);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(CONFIG.DEFAULT_LIVES);
+  const [misclickScore, setMisclickScore] = useState(0);
 
   //how often the objects are ticked
   const [circleTimer, setCircleTimer] = useState(Date.now());
@@ -70,11 +71,17 @@ const Targets: NextPage = () => {
   };
   const misClick = () => {
     setScore(score + CONFIG.DEFAULT_MISCLICK_DEDUCTION);
+    setMisclickScore(misclickScore + 1);
   };
 
   //scenes and UI
   let menu = (
-    <TargetsMenu score={score} lives={lives} clientRenderTick={counter}>
+    <TargetsMenu
+      score={score}
+      misclickScore={misclickScore}
+      lives={lives}
+      clientRenderTick={counter}
+    >
       <TargetsGame
         pauseTitle="TARGETS"
         pauseLitte="left shift to pause | space to start | right shift to reset"
@@ -88,13 +95,23 @@ const Targets: NextPage = () => {
   );
 
   let game = (
-    <TargetsMenu score={score} lives={lives} clientRenderTick={counter}>
+    <TargetsMenu
+      score={score}
+      misclickScore={misclickScore}
+      lives={lives}
+      clientRenderTick={counter}
+    >
       <TargetsGame>{drawCircles(circles, {}, clickedCircle)}</TargetsGame>
     </TargetsMenu>
   );
 
   let end = (
-    <TargetsMenu score={score} lives={lives} clientRenderTick={counter}>
+    <TargetsMenu
+      score={score}
+      misclickScore={misclickScore}
+      lives={lives}
+      clientRenderTick={counter}
+    >
       <TargetsGame
         pauseTitle="GAME OVER"
         pauseLitte="left shift to pause | space to start | right shift to reset"
@@ -121,6 +138,7 @@ const Targets: NextPage = () => {
     setCircles([]);
     setCounter(0);
     setScore(0);
+    setMisclickScore(0);
     setCircleRadiusSize(CONFIG.DEFAULT_STARTING_CIRCLE_RADIUS);
     setCircleSpawnSpeed(CONFIG.DEFAULT_STARTING_SPAWN_SPEED);
     setCircleShrinkSpeed(CONFIG.DEFAULT_STARTING_SHRINK_SPEED);
@@ -238,7 +256,12 @@ const Targets: NextPage = () => {
 
       //assign to game to draw via setOutput
       game = (
-        <TargetsMenu score={score} lives={lives} clientRenderTick={counter}>
+        <TargetsMenu
+          score={score}
+          misclickScore={misclickScore}
+          lives={lives}
+          clientRenderTick={counter}
+        >
           <TargetsGame menuActive={false} misClick={misClick}>
             {drawCircles(circles, {}, clickedCircle)}
           </TargetsGame>
