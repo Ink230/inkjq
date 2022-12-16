@@ -1,55 +1,15 @@
-# Getting Started
+## InkJQ Side-Projects
 
-An opinionated but pre-configured NextJS template.
+A presented collection of side-projects I use to learn and have fun with in React/NextJS. Below are some brief descriptions of the side-projects.
 
-`git clone git@github.com:Ink230/ink-nextjs-template.git`.
+### Targets
 
-then
+Click the circles before they disappear and get a high score!
 
-`npm install`
+The challenge was to produce a responsive DOM-based game with high interaction frequency without using canvas or WebGL. Further, keeping the game logic independent of the browser FPS was also required. The approach for these two objectives was to use useEffect with setInterval, which after configuring, seemed to provide a natural game-like development environment as a 'pseudo game engine'.
 
-# Summary
+v2 Roadmap:
 
-## Directory folders
-
-- .husky
-- .vscode
-- public
-- src
-  - components
-  - lib
-  - pages
-  - styles
-
-## Website Basic Config
-
-- \_app, \_document configured
-- index.tsx configured
-- Related modules and styles present
-
-## ESLint
-
-- Basic windows development config
-- No unused variables on save
-
-## Prettier
-
-- prettierignore
-- Opinionated settings + es5
-
-## tsconfig.json
-
-- Configure to your preferences
-
-## next.config.js
-
-- Default settings and tweaks
-
-## Husky
-
-- Pre-commit: eslint, prettier
-- Pre-push: build successfully
-
-## Storybook
-
-- Soon
+- User configurable options for spawn speed, shrink speed and radius sizing
+- Powerups like score multipliers, misclick-no-more and freeze states
+- Buffed circles with different HP levels and special behaviours
