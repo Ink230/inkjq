@@ -288,6 +288,25 @@ const Targets: NextPage = () => {
       setMenuTime(Date.now());
 
       //game logic
+      menu = (
+        <TargetsMenu
+          score={score}
+          misclickScore={misclickScore}
+          lives={lives}
+          clientRenderTick={counter}
+        >
+          <TargetsGame
+            pauseTitle="TARGETS"
+            pauseLitte="left shift to pause | space to start | right shift to reset"
+            startGame={startGame}
+          >
+            {drawCircles(circles, {
+              backgroundColor: '#414141',
+              border: 'solid 1px #2c2c2c',
+            })}
+          </TargetsGame>
+        </TargetsMenu>
+      );
 
       //draw
       setOutput(menu);
@@ -309,6 +328,27 @@ const Targets: NextPage = () => {
       setEndTime(Date.now());
 
       //game logic
+      end = (
+        <TargetsMenu
+          score={score}
+          misclickScore={misclickScore}
+          lives={lives}
+          clientRenderTick={counter}
+        >
+          <TargetsGame
+            pauseTitle="GAME OVER"
+            pauseLitte="left shift to pause | space to start | right shift to reset"
+            score={score}
+            gameOver={true}
+            startGame={startGame}
+          >
+            {drawCircles(circles, {
+              backgroundColor: '#414141',
+              border: 'solid 1px #2c2c2c',
+            })}
+          </TargetsGame>
+        </TargetsMenu>
+      );
 
       //draw
       setOutput(end);

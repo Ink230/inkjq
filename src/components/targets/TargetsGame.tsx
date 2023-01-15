@@ -10,6 +10,7 @@ type Props = {
   score?: number;
   gameOver?: boolean;
   misClick?: () => void;
+  startGame?: () => void;
 };
 
 type tiers = {
@@ -74,6 +75,7 @@ export const TargetsGame: React.FC<Props> = ({
   gameOver = false,
   score = 0,
   misClick = () => null,
+  startGame = () => null,
 }: Props) => {
   let miniMenu = <></>;
 
@@ -128,7 +130,7 @@ export const TargetsGame: React.FC<Props> = ({
 
   if (menuActive) {
     miniMenu = (
-      <div className={css.menucontainer}>
+      <div className={css.menucontainer} onTouchEnd={startGame}>
         <div className={css.pause}>{pauseTitle}</div>
         <div className={css.littlecontainer}>
           <div className={css.little}>{pauseLitte}</div>
@@ -136,9 +138,7 @@ export const TargetsGame: React.FC<Props> = ({
           <div className={css.little}>
             more instructions below
             <br />
-            <div className={css.small}>
-              m+kb only | 1920x1080 or higher resolution recommended
-            </div>
+            <div className={css.small}>touch | m+kb</div>
           </div>
         </div>
       </div>
@@ -150,6 +150,7 @@ export const TargetsGame: React.FC<Props> = ({
       className={css.gamecontainer}
       style={{ backgroundColor: backgroundColor }}
       onMouseDown={misClick}
+      onTouchEnd={misClick}
     >
       {children}
       {miniMenu}

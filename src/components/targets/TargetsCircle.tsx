@@ -24,6 +24,10 @@ export const TargetsCircle: React.FC<Props> = ({
         e.stopPropagation();
         clickedCircle(circle.id);
       }}
+      onTouchEnd={(e) => {
+        e.stopPropagation();
+        clickedCircle(circle.id);
+      }}
       key={circle.id}
       style={{
         backgroundColor: backgroundColor,
