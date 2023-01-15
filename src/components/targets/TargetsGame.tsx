@@ -137,7 +137,7 @@ export const TargetsGame: React.FC<Props> = ({
             more instructions below
             <br />
             <div className={css.small}>
-              1920x1080 or higher resolution recommended
+              m+kb only | 1920x1080 or higher resolution recommended
             </div>
           </div>
         </div>

@@ -202,7 +202,7 @@ const Targets: NextPage = () => {
         return () => clearInterval(interval);
       }
       //tick control
-      setTime(Date.now());
+      setTime(() => Date.now());
 
       //game logic
       setCounter(counter + 1);
