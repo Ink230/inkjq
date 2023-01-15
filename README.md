@@ -2,6 +2,8 @@
 
 A presented collection of side-projects I use to learn and have fun with in React/NextJS. Below are some brief descriptions of the side-projects.
 
+Live code at [InkJQ](https://inkjq.com)
+
 ### Targets
 
 Click the circles before they disappear and get a high score!
